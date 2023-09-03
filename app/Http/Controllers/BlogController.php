@@ -11,18 +11,21 @@ class BlogController extends Controller
 {
 
 public function index(){
-    $articles=Blog::paginate(1);
+    $articles=Blog::paginate(3);
+    $tags = Tag::all();
+    return view('index',['articles'=>$articles,'tags'=>$tags]);
 
-    return view('index',['articles'=>$articles]);
+
+
 }
 
 
 public function search(Request $request){
 
 $query=$request->input('query');
-
+$tags=Tag::all();
 $articles = Blog::where('header', 'like', "%$query%")->orWhere('content', 'like', "%$query%")->paginate(1);
-return view('search_results', compact('articles'));
+return view('search_results', compact('articles','tags'));
 
 }
 
@@ -34,7 +37,7 @@ public function store(Request $request)
     $blog->content = $request->content;
     $blog->save();
 
-    $tags = explode(',', $request->tags); // Etiketleri virgülle ayırdıysanız
+    $tags = explode(',', $request->tags);
     foreach ($tags as $tagName) {
         $tag = Tag::firstOrCreate(['name' => $tagName]);
         $blog->tags()->attach($tag->id);
@@ -49,12 +52,18 @@ public function getPostsByTag(Tag $tagName)
 {
 
     $articles = $tagName->blogs()->paginate(10);
-    return view('index', compact('articles'));
+    $tags = Tag::all();
+    return view('index',['articles'=>$articles,'tags'=>$tags]);
 }
 
 public function show($id){
 $contents=Blog::find($id);
-return view('articles.show',compact('contents'));
+$tags=Tag::all();
+$currentPostId = $contents->id;
+
+$otherPosts = Blog::where('id', '!=', $currentPostId)->limit(5)->get();
+
+return view('articles.show',compact('contents','tags','otherPosts'));
 }
 
 }
