@@ -16,6 +16,8 @@ ul a{
     text-decoration: none;
     font-size:20px;
 }
+
+
 </style>
 <body>
 @include('includes.style')
@@ -41,6 +43,12 @@ ul a{
 
 
 </div>
+
+
+
+
+@include('includes.comment')
+
 
 @include('includes.footer')
 </body>

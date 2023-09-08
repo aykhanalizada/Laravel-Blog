@@ -36,7 +36,7 @@
                 <p class="article-content">{{ Str::limit($article->content, 150) }}</p>
 
                 <div>
-                    Etiketler:
+                    Labels:
                     @foreach ($article->tags as $tag)
                         <span>{{ $tag->name }}</span>
                     @endforeach

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\Tag;
-
+use App\Models\Comment;
 
 class BlogController extends Controller
 {
@@ -24,7 +24,7 @@ public function search(Request $request){
 
 $query=$request->input('query');
 $tags=Tag::all();
-$articles = Blog::where('header', 'like', "%$query%")->orWhere('content', 'like', "%$query%")->paginate(1);
+$articles = Blog::where('header', 'like', "%$query%")->orWhere('content', 'like', "%$query%")->paginate(3);
 return view('search_results', compact('articles','tags'));
 
 }
@@ -62,8 +62,8 @@ $tags=Tag::all();
 $currentPostId = $contents->id;
 
 $otherPosts = Blog::where('id', '!=', $currentPostId)->limit(5)->get();
-
-return view('articles.show',compact('contents','tags','otherPosts'));
+$comments = $contents->comments;
+return view('articles.show',compact('contents','tags','otherPosts','comments'));
 }
 
 }
