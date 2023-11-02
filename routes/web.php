@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/blog',[BlogController::class,'index'])->name('blog');
+Route::get('/',[BlogController::class,'index'])->name('blog');
 
 Route::get('/search',[BlogController::class,'search'])->name('search');
 
